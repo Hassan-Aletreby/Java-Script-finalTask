@@ -93,7 +93,7 @@ function createAnewPost() {
   }
 }
 
-function addBtnClicked() {
+window.addBtnClicked = function () {
   document.getElementById("post-modal-submit-btn").innerHTML = "Create";
   document.getElementById("post-id-input").value = "";
   document.getElementById("post-modal-title").innerHTML = "Create A New Post";
@@ -104,4 +104,4 @@ function addBtnClicked() {
     {}
   );
   postModal.toggle();
-}
+};
