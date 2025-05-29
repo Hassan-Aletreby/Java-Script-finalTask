@@ -16,6 +16,8 @@ import {
   profileClicked,
   deletePostButtonClicked,
   editPostButtonClicked,
+  confirmPostDelete,
+  createCommentClicked,
 } from "./js/utils.js";
 const baseUrl = "https://tarmeezacademy.com/api/v1";
 setupUI();
@@ -90,32 +92,6 @@ function createAnewPost() {
       });
   }
 }
-function createCommentClicked() {
-  let commentBody = document.getElementById("commentInput").value;
-  let params = {
-    body: commentBody,
-  };
-  let token = localStorage.getItem("token");
-  let url = `${baseUrl}/posts/${id}/comments`;
-  toggleLoader(true);
-  axios
-    .post(url, params, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    })
-    .then(() => {
-      toggleLoader(false);
-      document.getElementById("commentInput").value = "";
-      // getPost();
-      appendAlert("The comment has been created successfully", "success");
-    })
-    .catch((error) => {
-      toggleLoader(false);
-      const message = error.response.data.message;
-      appendAlert(message, "danger");
-    });
-}
 
 function addBtnClicked() {
   document.getElementById("post-modal-submit-btn").innerHTML = "Create";
@@ -128,32 +104,4 @@ function addBtnClicked() {
     {}
   );
   postModal.toggle();
-}
-
-function confirmPostDelete() {
-  const postId = document.getElementById("delete-post-id-input").value;
-  const token = localStorage.getItem("token");
-  const headers = {
-    authorization: `Bearer ${token}`,
-    "Content-Type": "multipart/form-data",
-  };
-  toggleLoader(true);
-  axios
-    .delete(`${baseUrl}/posts/${postId}`, {
-      headers: headers,
-    })
-    .then((response) => {
-      toggleLoader(false);
-      const modal = document.getElementById("deletePostModal");
-      const modalInstance = bootstrap.Modal.getInstance(modal);
-      modalInstance.hide();
-      appendAlert("The post has been deleted successfully", "success");
-      setupUI();
-      refreshPosts();
-    })
-    .catch((error) => {
-      toggleLoader(false);
-      const message = error.response.data.message;
-      appendAlert(message, "danger");
-    });
 }
