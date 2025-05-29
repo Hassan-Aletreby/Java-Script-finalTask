@@ -13,10 +13,10 @@ body {
 .alert {
     position: fixed;
     z-index: 9999;
-    width: 25%;
+    width: max-content;
     right: 8px;
     bottom: 8px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
 }
 
@@ -35,6 +35,7 @@ body {
     border-radius: 50%;
     cursor: pointer;
     transition: all .3s ease-in-out;
+    z-index: 99999999;
 }
 
 .addbtn:hover {
