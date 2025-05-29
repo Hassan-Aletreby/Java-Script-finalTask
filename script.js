@@ -6,6 +6,10 @@ import {
   getCurrentUserId,
   setupUI,
   isPostsFetching,
+  loginBtnClicked,
+  registerBtnClicked,
+  logout,
+  appendAlert,
 } from "./js/utils.js";
 const baseUrl = "https://tarmeezacademy.com/api/v1";
 setupUI();
@@ -24,93 +28,6 @@ window.addEventListener("scroll", function () {
   }
 });
 
-function loginBtnClicked() {
-  const username = document.getElementById("username-input").value;
-  const password = document.getElementById("password-input").value;
-  const params = {
-    username: username,
-    password: password,
-  };
-  toggleLoader(true);
-  axios
-    .post(`${baseUrl}/login`, params)
-    .then((response) => {
-      toggleLoader(false);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      const modal = document.getElementById("loginModal");
-      const modalInstance = bootstrap.Modal.getInstance(modal);
-      modalInstance.hide();
-      appendAlert("Logged in successfully", "success");
-      setupUI();
-      refreshPosts();
-    })
-    .catch((error) => {
-      toggleLoader(false);
-      const message = error.response.data.message;
-      appendAlert(message, "danger");
-    });
-}
-function registerBtnClicked() {
-  const name = document.getElementById("register-name-input").value;
-  const username = document.getElementById("register-username-input").value;
-  const password = document.getElementById("register-password-input").value;
-  const userImage = document.getElementById("user-image").files[0];
-  let formData = new FormData();
-  formData.append("name", name);
-  formData.append("image", userImage);
-  formData.append("username", username);
-  formData.append("password", password);
-  toggleLoader(true);
-  axios
-    .post(`${baseUrl}/register`, formData)
-    .then((response) => {
-      toggleLoader(false);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      const modal = document.getElementById("registerModal");
-      const modalInstance = bootstrap.Modal.getInstance(modal);
-      modalInstance.hide();
-      appendAlert("New User Register successfully", "success");
-      setupUI();
-    })
-    .catch((error) => {
-      toggleLoader(false);
-      const message = error.response.data.message;
-      appendAlert(message, "danger");
-    });
-}
-function logout() {
-  toggleLoader(true);
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
-  appendAlert("Logged out Successfully", "success");
-  setupUI();
-  refreshPosts();
-}
-const appendAlert = (message, type) => {
-  const wrapper = document.createElement("div");
-  const alertElement = document.createElement("div");
-
-  alertElement.className = `alert alert-${type} alert-dismissible fade show`;
-  alertElement.setAttribute("role", "alert");
-
-  alertElement.innerHTML = `
-      <div>${message}</div>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    `;
-
-  wrapper.appendChild(alertElement);
-  alertPlaceholder.append(wrapper);
-
-  setTimeout(() => {
-    alertElement.classList.remove("show");
-    alertElement.classList.add("hide");
-    setTimeout(() => {
-      wrapper.remove();
-    }, 500);
-  }, 2000);
-};
 function createAnewPost() {
   let postId = document.getElementById("post-id-input").value;
   let isCreate = postId == null || postId == "";

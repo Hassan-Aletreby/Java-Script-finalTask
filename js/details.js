@@ -1,4 +1,12 @@
-import { baseUrl, toggleLoader, setupUI } from "./utils.js";
+import {
+  baseUrl,
+  toggleLoader,
+  setupUI,
+  loginBtnClicked,
+  registerBtnClicked,
+  logout,
+  appendAlert,
+} from "./utils.js";
 function getPost() {
   setupUI();
   const urlParams = new URLSearchParams(window.location.search);
