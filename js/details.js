@@ -6,6 +6,10 @@ import {
   registerBtnClicked,
   logout,
   appendAlert,
+  userClicked,
+  profileClicked,
+  deletePostButtonClicked,
+  editPostButtonClicked,
 } from "./utils.js";
 function getPost() {
   setupUI();
