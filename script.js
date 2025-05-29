@@ -462,17 +462,21 @@ function getCurrentUserId() {
 
 function getUser() {
   const id = getCurrentUserId();
-  axios.get(`${baseUrl}/users/${id}`).then((response) => {
-    const userInfo = response.data.data;
-    document.getElementById("profile__name").innerText = userInfo.name;
-    document.getElementById("profile__name1").innerText = userInfo.username;
-    document.getElementById("profile__user__name").innerText =
-      userInfo.username;
-    document.getElementById("profile__email").innerText = userInfo.email;
-    document.getElementById("profile__img").src = userInfo.profile_image;
-    document.getElementById("postsNum").innerText = userInfo.posts_count;
-    document.getElementById("commentsNum").innerText = userInfo.comments_count;
-  });
+  // Only trigger if the user id is found
+  if (id) {
+    axios.get(`${baseUrl}/users/${id}`).then((response) => {
+      const userInfo = response.data.data;
+      document.getElementById("profile__name").innerText = userInfo.name;
+      document.getElementById("profile__name1").innerText = userInfo.username;
+      document.getElementById("profile__user__name").innerText =
+        userInfo.username;
+      document.getElementById("profile__email").innerText = userInfo.email;
+      document.getElementById("profile__img").src = userInfo.profile_image;
+      document.getElementById("postsNum").innerText = userInfo.posts_count;
+      document.getElementById("commentsNum").innerText =
+        userInfo.comments_count;
+    });
+  }
 }
 getUser();
 function getUserPosts() {
