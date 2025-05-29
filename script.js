@@ -183,9 +183,9 @@ const appendAlert = (message, type) => {
   }, 2000);
 };
 function getCurrentUser() {
-  let user = null;
+  let user = "";
   const storageUser = localStorage.getItem("user");
-  if (storageUser != null) {
+  if (storageUser != "") {
     user = JSON.parse(storageUser);
   }
   return user;
