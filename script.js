@@ -481,21 +481,23 @@ function getUser() {
 getUser();
 function getUserPosts() {
   const id = getCurrentUserId();
-  toggleLoader(true);
-  axios
-    .get(`${baseUrl}/users/${id}/posts`)
-    .then((response) => {
-      toggleLoader(false);
-      const posts = response.data.data;
-      document.getElementById("user__posts").innerHTML = "";
-      for (const post of posts) {
-        const author = post.author;
-        let postTitle = post.title || "";
-        let user = getCurrentUser();
-        let isMyPost = user != null && post.author.id == user.id;
-        let editBtnContent = ``;
-        if (isMyPost) {
-          editBtnContent = `
+  // Only trigger if the user id is found
+  if (id) {
+    toggleLoader(true);
+    axios
+      .get(`${baseUrl}/users/${id}/posts`)
+      .then((response) => {
+        toggleLoader(false);
+        const posts = response.data.data;
+        document.getElementById("user__posts").innerHTML = "";
+        for (const post of posts) {
+          const author = post.author;
+          let postTitle = post.title || "";
+          let user = getCurrentUser();
+          let isMyPost = user != null && post.author.id == user.id;
+          let editBtnContent = ``;
+          if (isMyPost) {
+            editBtnContent = `
              <button class="btn btn-outline-secondary me-2 " id="editBtn" type="button" style="float:right ; z-index:999" onclick="editPostButtonClicked('${encodeURIComponent(
                JSON.stringify(post)
              )}')">
@@ -507,8 +509,8 @@ function getUserPosts() {
                     Delete
                   </button>
           `;
-        }
-        let content = `
+          }
+          let content = `
           <div class="card shadow my-5"  style="cursor: pointer">
             <div class="card-header">
               <img src="${author.profile_image}" alt="" style="width: 40px; height: 40px;" class="rounded-circle border border-2">
@@ -532,24 +534,25 @@ function getUserPosts() {
           </div>
       `;
 
-        document.getElementById("user__posts").innerHTML += content;
-        const currentPostTagsId = `postTags-${post.id}`;
-        document.getElementById(currentPostTagsId).innerHTML = "";
-        for (const tag of post.tags || []) {
-          let tagContent = `
+          document.getElementById("user__posts").innerHTML += content;
+          const currentPostTagsId = `postTags-${post.id}`;
+          document.getElementById(currentPostTagsId).innerHTML = "";
+          for (const tag of post.tags || []) {
+            let tagContent = `
           <button class="btn btn-sm rounded-5 px-3 mx-2" style="background-color:gray; color:white">
             ${tag.name}
           </button>
         `;
-          document.getElementById(currentPostTagsId).innerHTML += tagContent;
+            document.getElementById(currentPostTagsId).innerHTML += tagContent;
+          }
         }
-      }
-    })
-    .catch((error) => {
-      toggleLoader(false);
-      const message = error.response.data.message;
-      appendAlert(message, "danger");
-    });
+      })
+      .catch((error) => {
+        toggleLoader(false);
+        const message = error.response.data.message;
+        appendAlert(message, "danger");
+      });
+  }
 }
 getUserPosts();
 
